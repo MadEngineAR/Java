@@ -28,7 +28,7 @@ function countBasketPrice(arr) {
     i = 0
     if (i < arr.length) {
         let result = arr.reduce(function(sum, current) {
-            current = arr[i][2]
+            current = arr[i][2] * arr[i][3]
             i++
             return sum + current;
     }, 0);
