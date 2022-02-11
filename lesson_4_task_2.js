@@ -12,7 +12,7 @@ const basket = {
 
     addTobasket(prod) {
         this.products.push(prod)
-        return `Корзина: ${this.products}`
+        return this.products
     },
 
     delFrombasket(prod) {
@@ -22,7 +22,7 @@ const basket = {
             break;
             }
         }
-        return `Корзина: ${this.products}`
+        return this.products
     },
 
     countBasketPrice() {
@@ -33,7 +33,7 @@ const basket = {
                 i++
                 return sum + current;
         }, 0);
-        return `Сумма товаров в корзине: ${result} рублей`;
+        return result;
         }
     }
 };
