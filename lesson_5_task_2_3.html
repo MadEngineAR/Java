@@ -1,0 +1,179 @@
+<!--
+2. Сделать генерацию корзины динамической: верстка корзины не должна находиться в HTML-структуре. 
+Там должен быть только div, в который будет вставляться корзина, сгенерированная на базе JS:
+2.1. Пустая корзина должна выводить строку «Корзина пуста»;
+2.2. Наполненная должна выводить «В корзине: n товаров на сумму m рублей».
+3*. Сделать так, чтобы товары в каталоге выводились при помощи JS:
+3.1. Создать массив товаров (сущность Product);
+3.2. При загрузке страницы на базе данного массива генерировать вывод из него. 
+HTML-код должен содержать только div id=”catalog” без вложенного кода. Весь вид каталога генерируется JS.
+ -->
+
+
+ <!--Две задачи обьединил в одну. Так как задумывал органивать кнопку "Добавить в корзину" с последующим  использованием соответсвующих методов
+сущности Basket. Данный функционал не реализовал. Созданы сущности Product, Catalog и Basket. Отрисовка Catalog и Basket реализована
+ через функцию render принимающиую в качестве аргументов массив, названия полей, названия заголовков полей получаемой таблицы.  -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!-- <script src="script.js" defer></script> -->
+</head>
+
+<body>
+    <div id="catalog"></div>
+    <div id="basket"></div>
+
+    <script>
+        const basket = {
+            products: [],
+
+            addTobasket(prod) {
+                this.products.push(prod)
+                return this.products
+            },
+
+            delFrombasket(prod) {
+                for (let i = 0; i < this.products.length; i++) {
+                    if (prod.id === this.products[i].id) {
+                        this.products.splice(i, 1);
+                        break;
+                    }
+                }
+                return this.product
+            },
+
+            countBasketPrice() {
+              
+                i = 0
+                if (i < this.products.length) {
+                    let result = this.products.reduce(function (sum, current) {
+                        current = current.price * current.count
+                        i++
+                        return sum + current;
+                    }, 0);
+                    return result
+                }
+            },
+
+            createBasket() {
+                this.addTobasket(product_1);
+                this.addTobasket(product_2);
+                this.addTobasket(product_3);
+                this.delFrombasket(product_2);   
+                let myDiv = document.getElementById(`basket`);   
+                if (this.products.length === 0) { 
+                    const h2tag = document.createElement('h1');
+                    h2tag.style.color = 'blue';
+                    h2tag.textContent = 'Корзина пуста';
+                    myDiv.appendChild(h2tag) 
+                    return myDiv 
+                };
+                const h1tag = document.createElement('h1');
+                myDiv.appendChild(h1tag); 
+                h1tag.style.color = 'blue';
+                h1tag.textContent = 'Корзина';
+                myDiv.appendChild(render(basket.products, ['name', 'price', 'count', 'total'], ['Наименование', 'Цена, руб.', 'Количество, шт', 'Стоимость позиции, руб.']));
+                myDiv.appendChild(document.createElement('br'));
+                myDiv.appendChild(document.createTextNode(`В корзине: ${this.products.length} товара(-ов)  на сумму ${this.countBasketPrice()} руб.`));
+                return myDiv
+            },
+        }
+
+        const catalog = {
+            products: [],
+
+            addToCatalog(prod) {
+                this.products.push(prod)
+                return this.products
+            },
+
+            delFromCatalog(prod) {
+                for (let i = 0; i < this.products.length; i++) {
+                    if (prod.id === this.products[i].id) {
+                        this.products.splice(i, 1);
+                        break;
+                    }
+                }
+                return this.products
+            },
+
+            createCatalog() {
+                this.addToCatalog(product_1);
+                this.addToCatalog(product_2);
+                this.addToCatalog(product_3);
+                const h1tag = document.createElement('h1')
+                h1tag.style.color = 'red'
+                h1tag.textContent = 'Каталог'
+                let myDiv = document.getElementById(`catalog`);
+                myDiv.appendChild(h1tag)
+                myDiv.appendChild(render(catalog.products, ['name', 'price'], ['Наименование', 'Цена, руб.']));
+                return myDiv
+            }
+        }
+
+        function render(objectArray, fields, fieldTitles) {
+            let tbl = document.createElement('table');
+            tbl.setAttribute('border', '1');
+            tbl.setAttribute('bordercolor', 'grey')
+            let thead = document.createElement('thead');
+            thead.style.color = 'red';
+            let thr = document.createElement('tr');
+            fieldTitles.forEach((fieldTitle) => {
+                let th = document.createElement('th');
+                th.appendChild(document.createTextNode(fieldTitle));
+                thr.appendChild(th);
+            });
+            thead.appendChild(thr);
+            tbl.appendChild(thead);
+
+            let tbdy = document.createElement('tbody');
+            let tr = document.createElement('tr');
+            for (let i = 0; i < objectArray.length; i++) {
+                let tr = document.createElement('tr');
+                fields.forEach((field) => {
+                    let td = document.createElement('td');
+                    if (field == 'total') {
+                        td.textContent = `${objectArray[i].price * objectArray[i].count}`
+                    } else {
+                        td.textContent = `${objectArray[i][field]}`;
+                    };
+
+                    tr.appendChild(td);
+                });
+                tbdy.appendChild(tr);
+            };
+            tbl.appendChild(tbdy);
+
+            return tbl;
+        }
+
+        let product_1 = {
+            id: 1,
+            name: 'iphone',
+            price: 99000,
+            count: 2
+        };
+
+        let product_2 = {
+            id: 2,
+            name: 'macbook',
+            price: 149999,
+            count: 3
+        };
+
+        let product_3 = {
+            id: 3,
+            name: 'Macbook case',
+            price: 10000,
+            count: 1
+        };
+
+        catalog.createCatalog()
+        basket.createBasket()
+    </script>
+</body>
+
+</html>

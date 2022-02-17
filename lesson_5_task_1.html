@@ -1,0 +1,75 @@
+<!--
+1. Создать функцию, генерирующую шахматную доску. При этом можно использовать любые html-теги по своему желанию. 
+Доска должна быть разлинована соответствующим образом, т.е. чередовать черные и белые ячейки.
+Строки должны нумероваться числами от 1 до 8, столбцы – латинскими буквами A, B, C, D, E, F, G, H. (использовать createElement / appendChild)
+ -->
+
+
+ <!--Использовал заготовку функции render из 2 и 3 задания(их выполнял в первую очередь)-->
+ <html lang="en">
+ <head>
+     <meta charset="UTF-8">
+     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Document</title>
+ </head>
+ <body>
+     <script>
+        const chess_board = {
+             number_fields : [1,2,3,4,5,6,7,8],
+             letter_fields :  ['','A','B','C','D','E','F','G','H'],
+             create_chess_board() {
+                let myDiv = document.createElement(`div`);   
+                document.body.appendChild(myDiv)
+                myDiv.appendChild(render(chess_board.number_fields,chess_board.letter_fields));
+                return myDiv
+            },
+         
+        };
+        
+        function render(objectArray, fieldTitles) {
+            let tbl = document.createElement('table');
+            tbl.setAttribute('border', '1');
+            tbl.setAttribute('bordercolor', 'grey')
+            let thead = document.createElement('thead');
+            let thr = document.createElement('tr');
+            fieldTitles.forEach((fieldTitle) => {
+                let th = document.createElement('th');
+                th.appendChild(document.createTextNode(fieldTitle));
+                th.setAttribute('height',70);
+                th.style.border = '0'
+                thr.appendChild(th);
+            });
+            thead.appendChild(thr);
+            tbl.appendChild(thead);
+
+            let tbdy = document.createElement('tbody');
+            let tr = document.createElement('tr');
+            for (let i = 0; i < objectArray.length; i++) {
+                let tr = document.createElement('tr');
+                 for (let j = 0; j <fieldTitles.length; j++) {
+                    let td = document.createElement('td');
+                    td.setAttribute('width',70);
+                    td.setAttribute('height',70);
+                    if (j == 0) {
+                         td.textContent = `${objectArray[objectArray.length - 1 - i]}`;
+                         td.style.fontSize = "20px";
+                         td.style.textAlign = "center"
+                         td.style.border = '0'
+                    };
+                    if((i+j) % 2 == 0 && j != 0) {
+                        td.style.backgroundColor = "black"
+                    }
+                    tr.appendChild(td);
+                 };
+                 tbdy.appendChild(tr);
+            };
+            tbl.appendChild(tbdy);
+
+            return tbl;
+        }
+
+       chess_board.create_chess_board()
+     </script>
+ </body>
+ </html>
