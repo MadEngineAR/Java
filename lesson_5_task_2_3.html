@@ -27,29 +27,29 @@ HTML-код должен содержать только div id=”catalog” б
     <div id="basket"></div>
 
     <script>
-        const basket = {
-            products: [],
+               const basket = {
+            products_in_basket: [],
 
             addTobasket(prod) {
-                this.products.push(prod)
-                return this.products
+                this.products_in_basket.push(prod)
+                return this.products_in_basket
             },
 
             delFrombasket(prod) {
-                for (let i = 0; i < this.products.length; i++) {
-                    if (prod.id === this.products[i].id) {
-                        this.products.splice(i, 1);
+                for (let i = 0; i < this.products_in_basket.length; i++) {
+                    if (prod.id === this.products_in_basket[i].id) {
+                        this.products_in_basket.splice(i, 1);
                         break;
                     }
                 }
-                return this.product
+                return this.products_in_basket
             },
 
             countBasketPrice() {
               
                 i = 0
-                if (i < this.products.length) {
-                    let result = this.products.reduce(function (sum, current) {
+                if (i < this.products_in_basket.length) {
+                    let result = this.products_in_basket.reduce(function (sum, current) {
                         current = current.price * current.count
                         i++
                         return sum + current;
@@ -64,7 +64,7 @@ HTML-код должен содержать только div id=”catalog” б
                 this.addTobasket(product_3);
                 this.delFrombasket(product_2);   
                 let myDiv = document.getElementById(`basket`);   
-                if (this.products.length === 0) { 
+                if (this.products_in_basket.length === 0) { 
                     const h2tag = document.createElement('h1');
                     h2tag.style.color = 'blue';
                     h2tag.textContent = 'Корзина пуста';
@@ -75,9 +75,10 @@ HTML-код должен содержать только div id=”catalog” б
                 myDiv.appendChild(h1tag); 
                 h1tag.style.color = 'blue';
                 h1tag.textContent = 'Корзина';
-                myDiv.appendChild(render(basket.products, ['name', 'price', 'count', 'total'], ['Наименование', 'Цена, руб.', 'Количество, шт', 'Стоимость позиции, руб.']));
+                myDiv.appendChild(render(this.products_in_basket, ['name', 'price', 'count', 'total'], ['Наименование', 'Цена, руб.', 'Количество, шт', 'Стоимость позиции, руб.']));
                 myDiv.appendChild(document.createElement('br'));
-                myDiv.appendChild(document.createTextNode(`В корзине: ${this.products.length} товара(-ов)  на сумму ${this.countBasketPrice()} руб.`));
+                myDiv.appendChild(document.createTextNode(`В корзине: ${this.products_in_basket.length} 
+                товара(-ов)  на сумму ${this.countBasketPrice()} руб.`));
                 return myDiv
             },
         }
