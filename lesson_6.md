@@ -1,0 +1,1 @@
+Mustaev R lesson 6 task 1
